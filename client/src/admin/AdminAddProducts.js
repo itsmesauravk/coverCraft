@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function AdminAddProducts() {
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md">
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md mt-10">
       <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
 
       <div className="mb-4">

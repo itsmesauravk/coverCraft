@@ -27,7 +27,7 @@ export default function AdminLayout() {
 
         <Link
           to="/admin/dashboard"
-          className={`text-2xl mt-2 text-white hover:bg-black mb-2 p-2 ${
+          className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/dashboard" && "bg-black"
           }`}
           onClick={() => handleLinkClick("/admin/dashboard")}
@@ -36,7 +36,7 @@ export default function AdminLayout() {
         </Link>
         <Link
           to="/admin/users"
-          className={`text-2xl mt-2 text-white hover:bg-black mb-2 p-2 ${
+          className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/users" && "bg-black"
           }`}
           onClick={() => handleLinkClick("/admin/users")}
@@ -45,7 +45,7 @@ export default function AdminLayout() {
         </Link>
         <Link
           to="/admin/products"
-          className={`text-2xl mt-2 text-white hover:bg-black mb-2 p-2 ${
+          className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/products" && "bg-black"
           }`}
           onClick={() => handleLinkClick("/admin/products")}
@@ -54,7 +54,7 @@ export default function AdminLayout() {
         </Link>
         <Link
           to="/admin/add-products"
-          className={`text-2xl mt-2 text-white hover:bg-black mb-2 p-2 ${
+          className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/add-products" && "bg-black"
           }`}
           onClick={() => handleLinkClick("/admin/add-products")}
