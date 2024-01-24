@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function AdminAddProducts() {
+    const [selectedPhoto, setSelectedPhoto] = useState("")
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-md mt-10">
       <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
@@ -16,8 +17,24 @@ export default function AdminAddProducts() {
       </div>
 
       <div className="mb-4">
+        {selectedPhoto && (
+            <div>
+              <img
+                alt="not found"
+                width={"250px"}
+                src={URL.createObjectURL(selectedPhoto)}
+              />
+              <br />
+              <button onClick={() => setSelectedPhoto(null)}>Remove</button>
+            </div>
+          )}
+
         <label className="block text-sm font-medium text-gray-600">Add Photo</label>
-        <input type="file" className="mt-1 p-2 w-full border rounded-md" />
+        <input
+         type="file"
+         className="mt-1 p-2 w-full border rounded-md" 
+         onChange={(e)=>setSelectedPhoto(e.target.files[0])}
+         />
       </div>
 
       <div className="mb-4">
