@@ -5,12 +5,14 @@ const {
     show,
     AddNewProduct,
     uploadSingle,
-    getProducts
+    getProducts,
+    deleteProduct
 
      } = require('../AdminController/Controller');
 
 router.route('/show').get(show);
 router.route('/add-product').post(uploadSingle,AddNewProduct);
 router.route('/get-products').get(getProducts);
+router.route('/delete-product/:id').delete(deleteProduct);
 
 module.exports = router;

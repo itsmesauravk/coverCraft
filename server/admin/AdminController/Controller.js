@@ -100,5 +100,7 @@ module.exports = {
     show,
     AddNewProduct,
     uploadSingle,
-    getProducts
+    getProducts,
+    deleteProduct
+    
 }
