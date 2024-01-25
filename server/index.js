@@ -4,7 +4,13 @@ const express = require('express');
 const app = express();
 const adminRoute = require('./admin/AdminRoute/Route');
 
+
+require('dotenv').config('path')
+
 const port = 4000
+
+const connectDB = require('./Database/DBconnect');
+connectDB();
 
 
 
