@@ -8,7 +8,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
-        return cb(null, '.../uploads');
+        return cb(null, './uploads');
     },
     filename: function (req,file,cb){
         const uniqueFileName = Date.now() + "_" + file.originalname;
@@ -47,13 +47,58 @@ const AddNewProduct =async(req,res) =>{
         console.log("Error adding new Product : ",error)
     }
 }
+//for uploading the photo
 const uploadSingle = upload.single("coverPhoto") ;
 
+// for getting all product
+const getProducts = async(req,res) =>{
+
+    try {
+        const allProducts = await AddProduct.find();
+        if(allProducts){
+            res.status(200).json({
+                message:"All Products",
+                data:allProducts
+            })
+        }else{
+            res.status(400).json({
+                message:"No Products found."
+            })
+        }
+    } catch (error) {
+        console.log("Error getting all products : ",error)
+    }
+}
+
+//for delecting the product
+const deleteProduct = async(req,res) =>{
+    try {
+        const {id} = req.params;
+        const deleteProduct = await AddProduct.findByIdAndDelete(id);
+        if(deleteProduct){
+            res.status(200).json({
+                message:"Product deleted successfully",
+                data:deleteProduct
+            })
+        }else{
+            res.status(400).json({
+                message:"No Product found."
+            })
+        }
+        
+    } catch (error) {
+        res.status(400).json({
+            message:"Error deleting the product : ",error
+        })
+    }
+
+}
 
 
 
 module.exports = {
     show,
     AddNewProduct,
-    uploadSingle
+    uploadSingle,
+    getProducts
 }

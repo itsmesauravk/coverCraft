@@ -2,6 +2,9 @@
 
 const express = require('express');
 const app = express();
+
+const cors = require('cors');
+
 const adminRoute = require('./admin/AdminRoute/Route');
 
 
@@ -13,8 +16,19 @@ const connectDB = require('./Database/DBconnect');
 connectDB();
 
 
+//middle ware
 
 app.use(express.json());
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static('uploads'));
+app.use(cors(
+    {
+        origin:'http://localhost:3000',
+        credentials:true
+    }
+))
+
 
 app.use('/admin', adminRoute);
 
