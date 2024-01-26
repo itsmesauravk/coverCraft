@@ -58,88 +58,88 @@ export default function AdminAddProducts() {
         <div>
           <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
           <form onSubmit={addProduct}>
-          <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Name</label>
-                <input
-                type="text"
-                required
-                  className="mt-1 p-2 w-full border rounded-md"
-                  value={coverName}
-                  onChange={(e)=>setCoverName(e.target.value)}
-                  />
-              </div>
-      
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Price</label>
-                <input
-                type="number"
-                value={coverPrice}
-                onChange={(e)=>setCoverPrice(e.target.value)}
-                required
-                className="mt-1 p-2 w-full border rounded-md" />
-              </div>
-      
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Category</label>
-                <select 
-                value={coverCategory}
-                required
-                onChange={(e)=>setCoverCategory(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md">
-                  <option value="">--Cover Types--</option>
-                  <option value="hard-cover">3D-Hard Cover</option>
-                  <option value="side-rubber">2D-Side Rubber</option>
-                  <option value="hard-full">3D-Hard Full</option>
-                  <option value="double-layer">Double Layers</option>
-                </select>
-              </div>
-      
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Type</label>
-                <select
-                  value={coverType}
+            <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-600">Name</label>
+                  <input
+                  type="text"
                   required
-                  onChange={(e)=>setCoverType(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md">
-                  <option value="">--Device Options--</option>
-                  <option value="mobile-cover">Mobile Cover</option>
-                  <option value="laptop-cover">Laptop Cover</option>
-                  <option value="wraps">Wraps</option>
-                </select>
-              </div>
-      
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-600">Description</label>
-                <textarea
-                value={coverDescription}
-                required
-                onChange={(e)=>setCoverDescription(e.target.value)}
-                className="mt-1 p-2 w-full border rounded-md"></textarea>
-              </div>
-      
-              <div className="mb-4">
-                {selectedPhoto && (
-                    <div>
-                      <img
-                        alt="not found"
-                        width={"250px"}
-                        src={URL.createObjectURL(selectedPhoto)}
-                      />
-                      <br />
-                      <button onClick={() => setSelectedPhoto(null)}>Remove</button>
-                    </div>
-                  )}
-      
-                <label className="block text-sm font-medium text-gray-600">Add Photo</label>
-                <input
-                type="file"
-                required
-                name="coverPhoto" 
-                className="mt-1 p-2 w-full border rounded-md" 
-                onChange={(e)=>setSelectedPhoto(e.target.files[0])}
-                />
-              </div>
-      
+                    className="mt-1 p-2 w-full border rounded-md"
+                    value={coverName}
+                    onChange={(e)=>setCoverName(e.target.value)}
+                    />
+                </div>
+        
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-600">Price</label>
+                  <input
+                  type="number"
+                  value={coverPrice}
+                  onChange={(e)=>setCoverPrice(e.target.value)}
+                  required
+                  className="mt-1 p-2 w-full border rounded-md" />
+                </div>
+        
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-600">Category</label>
+                  <select 
+                  value={coverCategory}
+                  required
+                  onChange={(e)=>setCoverCategory(e.target.value)}
+                  className="mt-1 p-2 w-full border rounded-md">
+                    <option value="">--Cover Types--</option>
+                    <option value="hard-cover">3D-Hard Cover</option>
+                    <option value="side-rubber">2D-Side Rubber</option>
+                    <option value="hard-full">3D-Hard Full</option>
+                    <option value="double-layer">Double Layers</option>
+                  </select>
+                </div>
+        
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-600">Type</label>
+                  <select
+                    value={coverType}
+                    required
+                    onChange={(e)=>setCoverType(e.target.value)}
+                  className="mt-1 p-2 w-full border rounded-md">
+                    <option value="">--Device Options--</option>
+                    <option value="mobile-cover">Mobile Cover</option>
+                    <option value="laptop-cover">Laptop Cover</option>
+                    <option value="wraps">Wraps</option>
+                  </select>
+                </div>
+        
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-600">Description</label>
+                  <textarea
+                  value={coverDescription}
+                  required
+                  onChange={(e)=>setCoverDescription(e.target.value)}
+                  className="mt-1 p-2 w-full border rounded-md"></textarea>
+                </div>
+        
+                <div className="mb-4">
+                  {selectedPhoto && (
+                      <div>
+                        <img
+                          alt="not found"
+                          width={"250px"}
+                          src={URL.createObjectURL(selectedPhoto)}
+                        />
+                        <br />
+                        <button onClick={() => setSelectedPhoto(null)}>Remove</button>
+                      </div>
+                    )}
+        
+                  <label className="block text-sm font-medium text-gray-600">Add Photo</label>
+                  <input
+                  type="file"
+                  required
+                  name="coverPhoto" 
+                  className="mt-1 p-2 w-full border rounded-md" 
+                  onChange={(e)=>setSelectedPhoto(e.target.files[0])}
+                  />
+                </div>
+        
               <button type='submit' className="bg-red-500 text-white font-bold px-4 py-2 rounded-md hover:bg-red-400 ">Add Product</button>
           </form>
         </div>

@@ -1,6 +1,6 @@
 
 //add product schema
-const AddProduct = require('../AddSchema');
+const AddProduct = require('../../Schema/AddSchema');
 
 //for image
 const multer = require('multer');
@@ -94,6 +94,71 @@ const deleteProduct = async(req,res) =>{
 
 }
 
+//for single product details
+const singleProduct = async(req,res) =>{
+    try {
+        const {id} = req.params;
+        const singleProduct = await AddProduct.findById(id);
+        if(singleProduct){
+            res.status(200).json({
+                message:"Product details",
+                data:singleProduct
+            })
+        }else{
+            res.status(400).json({
+                message:"No Product found."
+            })
+        }
+        
+    } catch (error) {
+        res.status(400).json({ 
+            message:"Error getting the product : ",error
+        })
+    }
+
+}
+
+//for updating the product
+const updateProduct = async(req,res) =>{
+    try {
+        const {id} = req.params;
+        const {coverName,coverPrice,coverCategory,coverType,coverDescription} = req.body;
+
+        const coverPhoto = req.file.path;
+
+        const updateProduct = await AddProduct.findByIdAndUpdate(
+            id,
+            {
+                coverName: coverName,
+                coverPrice: coverPrice,
+                coverPhoto: coverPhoto,
+                coverCategory: coverCategory,
+                coverType: coverType,
+                coverDescription: coverDescription
+            },
+            { new: true } 
+        );
+        if(updateProduct){
+            res.status(200).json({
+                message:"Product updated successfully",
+                data:updateProduct
+            })
+        }else{      res.status(400).json({
+                message:"No Product found."
+            })
+        }
+        
+    } catch (error) {
+        res.status(400).json({
+            message:"Error updating the product : ",error
+        })
+    }
+
+}
+
+//for update the photo
+const updateSingle = upload.single("updateCoverPhoto") ;
+    
 
 
 module.exports = {
@@ -101,6 +166,9 @@ module.exports = {
     AddNewProduct,
     uploadSingle,
     getProducts,
-    deleteProduct
+    deleteProduct,
+    singleProduct,
+    updateProduct,
+    updateSingle
     
 }

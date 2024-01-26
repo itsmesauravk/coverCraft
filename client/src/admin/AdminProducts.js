@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../App.css';
+import { Navigate } from 'react-router-dom';
 
 export default function AdminProducts() {
   const url = "http://localhost:4000";
 
   const [products, setProducts] = useState([]);
-  const [productId,setProductId] = useState('');
-
+  const [productId, setProductId] = useState('');
+  const [updateProductId, setUpdateProductId] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export default function AdminProducts() {
           },
         });
         const data = await response.json();
-        // console.log("All Products: ", data.data);
         setProducts(data.data);
       } catch (error) {
         console.error("Error getting all products:", error);
@@ -35,33 +34,34 @@ export default function AdminProducts() {
 
   useEffect(() => {
     const deleteProduct = async () => {
-      const confimDelete = window.confirm("Are you sure you want to delete this product?");
-      if(confimDelete){
+      const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+      if (confirmDelete) {
         try {
           const response = await axios.delete(`${url}/admin/delete-product/${productId}`);
           if (response) {
             alert("Product deleted successfully");
             setProductId('');
-             // Remove the deleted product from the state
-             setProducts(prevProducts => prevProducts.filter(product => product._id !== productId));
+            setProducts(prevProducts => prevProducts.filter(product => product._id !== productId));
           } else {
             alert("Unable to delete the product");
           }
         } catch (error) {
           alert("Error deleting the product: ", error);
         }
-      }else{
+      } else {
         setProductId('');
       }
-      
     };
-  
+
     // Execute deleteProduct if productId is available
     if (productId) {
       deleteProduct();
-
     }
   }, [url, productId]);
+
+  if (updateProductId) {
+    return <Navigate to={`/admin/update-product/${updateProductId}`} />;
+  }
   
  
 
@@ -95,9 +95,13 @@ export default function AdminProducts() {
                 </p>
                 <p className="text-gray-600 mb-4">Type: {product.coverType}</p>
                 <div className="flex gap-4">
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:border-red-300">
-                    Edit
+                  
+                  <button
+                  onClick={()=>setUpdateProductId(product._id)}
+                   className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:border-red-300">
+                      Edit
                   </button>
+                 
                   <button 
                   onClick={()=>setProductId(product._id)}
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-400 focus:outline-none focus:ring focus:border-red-300"
