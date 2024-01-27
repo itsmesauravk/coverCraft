@@ -6,6 +6,7 @@ const app = express();
 const cors = require('cors');
 
 const adminRoute = require('./admin/AdminRoute/Route');
+const userRoute = require('./backend/route/route')
 
 
 require('dotenv').config('path')
@@ -14,6 +15,8 @@ const port = 4000
 
 const connectDB = require('./Database/DBconnect');
 connectDB();
+
+
 
 
 //middle ware
@@ -31,6 +34,7 @@ app.use(cors(
 
 
 app.use('/admin', adminRoute);
+app.use('/', userRoute);
 
 
 
@@ -43,3 +47,6 @@ app.get('/',(req,res)=>{
 app.listen(port,()=>{
     console.log(`Server is listening on port ${port}`);
 });
+
+
+

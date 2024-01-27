@@ -1,15 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
+//for image
+const upload = require('../../middleware/multer');
+
+const uploadSingle = upload.single("coverPhoto") ;
+const updateSingle = upload.single("updateCoverPhoto") ;
+
+
 const {
     show,
     AddNewProduct,
-    uploadSingle,
     getProducts,
     deleteProduct,
     singleProduct,
     updateProduct,
-    updateSingle
 
      } = require('../AdminController/Controller');
 

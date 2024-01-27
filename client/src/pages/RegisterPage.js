@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,22 +9,63 @@ export default function RegisterPage(){
     lastName: '',
     email: '',
     password: '',
-    photo: '',
+    userPhoto: '',
   });
+  const [confirmPassword, setConfirmPassword] = useState('')
 
+  const url = "http://localhost:4000"
  
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, files } = e.target;
+
+    // Check if the input is a file input
+    if (name === 'userPhoto' && files.length > 0) {
+        setFormData({ ...formData, userPhoto: files[0] });
+    } else {
+        setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const registerUser =  async(e) => {
     e.preventDefault();
-    // Handle registration logic here
-    // You can make an API call to register the user
+    try{
+        if(formData.password !== confirmPassword){
+          alert("Passwords do not match")
+          return
+        }
+        const {firstName, middleName, lastName, email, password, userPhoto} = formData;
+        const response = await axios.post(`${url}/register`,{
+            firstName:firstName,
+            middleName:middleName,
+            lastName:lastName,
+            email:email,
+            password:password,
+            userPhoto:userPhoto
+            },
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            })
+        if(response.status === 200){
+            alert("User Registered Successfully")
+            setFormData({
+              firstName: '',
+              middleName: '',
+              lastName: '',
+              email: '',
+              password: '',
+              userPhoto: '',
+            })
+            setConfirmPassword('')
+        }else{
+            alert("Error registering the user")
+        }
 
-    // After successful registration, you can redirect to the login page
+    }catch(error){
+      console.log("Error on registration :",error)
+    }
     
   };
 
@@ -37,9 +79,9 @@ export default function RegisterPage(){
       <div className="absolute inset-0 bg-black opacity-40"></div>
       <div className="relative bg-white p-8 shadow-md rounded-md max-w-md w-full">
         <h1 className="text-2xl font-bold mb-6">Register</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={registerUser}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">First Name</label>
+            <label className="block text-sm font-medium text-gray-600">First Name <span className='text-red-600'>*</span></label>
             <input
               type="text"
               name="firstName"
@@ -62,7 +104,7 @@ export default function RegisterPage(){
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">Last Name</label>
+            <label className="block text-sm font-medium text-gray-600">Last Name <span className='text-red-600'>*</span></label>
             <input
               type="text"
               name="lastName"
@@ -74,7 +116,7 @@ export default function RegisterPage(){
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">Email</label>
+            <label className="block text-sm font-medium text-gray-600">Email <span className='text-red-600'>*</span></label>
             <input
               type="email"
               name="email"
@@ -86,7 +128,7 @@ export default function RegisterPage(){
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">Password</label>
+            <label className="block text-sm font-medium text-gray-600">Password <span className='text-red-600'>*</span></label>
             <input
               type="password"
               name="password"
@@ -97,12 +139,31 @@ export default function RegisterPage(){
               minLength="8"
             />
           </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600">Confirm Password <span className='text-red-600'>*</span></label>
+            <input
+              type="password"
+              name="password"
+              value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+              className="mt-1 p-2 w-full border rounded-md"
+              required
+              minLength="8"
+            />
+          </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-600">Photo URL</label>
+            <label className="block text-sm font-medium text-gray-600">Photo <span className='text-red-600'>*</span></label>
+            {formData.userPhoto && (
+              <img
+                src={URL.createObjectURL(formData.userPhoto)}
+                alt="user"
+                className="w-20 h-20 object-cover rounded-full"
+              />
+            )}
             <input
-              type="text"
-              name="photo"
+              type="file"
+              name="userPhoto"
               value={formData.photo}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"

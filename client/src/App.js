@@ -18,17 +18,18 @@ import RegisterPage from './pages/RegisterPage';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage/>} />
+      <Route path="/:id" element={<HomePage/>} />
       <Route path='/login' element={<LoginPage/>} />
       <Route path='/register' element={<RegisterPage/>} />
 
-      <Route path="/admin" element={<AdminLayout/>} >
-        <Route path="/admin/dashboard" element={<AdminPanel/>} />
-        <Route path="/admin/users" element={<AdminUsers/>} />
-        <Route path="/admin/products" element={<AdminProducts/>} />
-        <Route path="/admin/add-products" element={<AdminAddProducts/>} />
-        <Route path="/admin/update-product/:id" element={<AdminUpdateProduct/>} />
+      <Route path="/:id/admin" element={<AdminLayout/>}>
+        <Route path="dashboard" element={<AdminPanel/>} />
+        <Route path="users" element={<AdminUsers/>} />
+        <Route path="products" element={<AdminProducts/>} />
+        <Route path="add-products" element={<AdminAddProducts/>} />
+        <Route path="update-product/:id" element={<AdminUpdateProduct/>} />
       </Route>
+
 
     </Routes>
   );

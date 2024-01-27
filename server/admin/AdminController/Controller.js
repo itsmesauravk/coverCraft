@@ -2,20 +2,20 @@
 //add product schema
 const AddProduct = require('../../Schema/AddSchema');
 
-//for image
-const multer = require('multer');
+// //for image
+// const multer = require('multer');
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb){
-        return cb(null, './uploads');
-    },
-    filename: function (req,file,cb){
-        const uniqueFileName = Date.now() + "_" + file.originalname;
-        cb(null, file.fieldname + "_" + uniqueFileName);
-    }
-})
-const upload = multer({storage})
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb){
+//         return cb(null, './uploads');
+//     },
+//     filename: function (req,file,cb){
+//         const uniqueFileName = Date.now() + "_" + file.originalname;
+//         cb(null, file.fieldname + "_" + uniqueFileName);
+//     }
+// })
+// const upload = multer({storage})
 
 
 const show =  (req,res) => {
@@ -47,8 +47,8 @@ const AddNewProduct =async(req,res) =>{
         console.log("Error adding new Product : ",error)
     }
 }
-//for uploading the photo
-const uploadSingle = upload.single("coverPhoto") ;
+
+
 
 // for getting all product
 const getProducts = async(req,res) =>{
@@ -155,20 +155,14 @@ const updateProduct = async(req,res) =>{
     }
 
 }
-
-//for update the photo
-const updateSingle = upload.single("updateCoverPhoto") ;
     
 
 
 module.exports = {
     show,
     AddNewProduct,
-    uploadSingle,
     getProducts,
     deleteProduct,
     singleProduct,
-    updateProduct,
-    updateSingle
-    
+    updateProduct,  
 }
