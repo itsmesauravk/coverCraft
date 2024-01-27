@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt');
 
 const register = async (req, res) => {
     try{
-        const {firstName, lastName, email, password} = req.body;
+        const {firstName, lastName, email, password, number} = req.body;
         const photo = req.file.path;
 
         const salt = bcrypt.genSaltSync(10);
@@ -22,6 +22,7 @@ const register = async (req, res) => {
             firstName:firstName,
             lastName:lastName,
             email:email,
+            number:number,
             password:hashedPassword,
             photo:photo
         })
@@ -67,14 +68,23 @@ const login = async (req, res) => {
             middleName:verifyUser.middleName,
             lastName:verifyUser.lastName,
             email:verifyUser.email,
+            number: verifyUser.number,
             photo:verifyUser.photo,
             isAdmin:verifyUser.isAdmin
         }, process.env.JWT_SECRET);
         
         if(token){
+            res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
             res.status(200).json({
                 token:token,
                 id:verifyUser._id,
+                firstName:verifyUser.firstName,
+                middleName:verifyUser.middleName,
+                lastName:verifyUser.lastName,
+                email:verifyUser.email,
+                number: verifyUser.number,
+                photo:verifyUser.photo,
+                isAdmin:verifyUser.isAdmin,
                 message:"Login Successful"
             })
         }
@@ -84,9 +94,37 @@ const login = async (req, res) => {
 
 }
 
+//  FOR GETTING THE PROFILE OF THE USER
+const profile = async (req, res) => {
+    try {
+        const { token } = req.cookies;
+
+        if (!token) {
+            return res.status(401).json({ message: "Token not found" });
+        }
+
+        const userInfo = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (userInfo) {
+            return res.status(200).json({
+                firstName:userInfo.firstName,
+                middleName:userInfo.middleName,
+                lastName:userInfo.lastName,
+                email:userInfo.email,
+                isAdmin:userInfo.email
+            });
+        }
+    } catch (error) {
+        // Handle token verification errors
+        console.error("Error while getting the profile:", error);
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+};
+
 
 module.exports = {
     register,
-    login
+    login,
+    profile
 }
 

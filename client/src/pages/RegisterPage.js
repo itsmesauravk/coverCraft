@@ -8,6 +8,7 @@ export default function RegisterPage(){
     middleName: '',
     lastName: '',
     email: '',
+    number:'',
     password: '',
     userPhoto: '',
   });
@@ -34,12 +35,13 @@ export default function RegisterPage(){
           alert("Passwords do not match")
           return
         }
-        const {firstName, middleName, lastName, email, password, userPhoto} = formData;
+        const {firstName, middleName, lastName, email,number ,password, userPhoto} = formData;
         const response = await axios.post(`${url}/register`,{
             firstName:firstName,
             middleName:middleName,
             lastName:lastName,
             email:email,
+            number:number,
             password:password,
             userPhoto:userPhoto
             },
@@ -55,6 +57,7 @@ export default function RegisterPage(){
               middleName: '',
               lastName: '',
               email: '',
+            number:'',
               password: '',
               userPhoto: '',
             })
@@ -121,6 +124,18 @@ export default function RegisterPage(){
               type="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+              className="mt-1 p-2 w-full border rounded-md"
+              required
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-600">Number <span className='text-red-600'>*</span></label>
+            <input
+              type="number"
+              name="number"
+              value={formData.number}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md"
               required

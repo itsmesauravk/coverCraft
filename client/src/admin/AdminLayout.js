@@ -1,18 +1,35 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 
 export default function AdminLayout() {
+
+
   const navigate = useNavigate();
   const [currentPath, setCurrentPath] = useState("");
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
 
   useEffect(() => {
-    // Set the currentPath when the component mounts
     setCurrentPath(window.location.pathname);
   }, []);
 
   const handleLinkClick = (path) => {
     setCurrentPath(path);
     navigate(path);
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutConfirmation(true);
+  };
+
+  const handleConfirmLogout = () => {
+    // Perform any logout cleanup if needed
+    setShowLogoutConfirmation(false);
+    navigate("/login");
+    console.log("Logout Sucessfully");
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirmation(false);
   };
 
   return (
@@ -26,7 +43,7 @@ export default function AdminLayout() {
         </div>
 
         <Link
-          to="/admin/dashboard"
+          to={`/admin/dashboard`}
           className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/dashboard" && "bg-black"
           }`}
@@ -35,7 +52,7 @@ export default function AdminLayout() {
           Dashboard
         </Link>
         <Link
-          to="/admin/users"
+          to={`/admin/users`}
           className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/users" && "bg-black"
           }`}
@@ -44,7 +61,7 @@ export default function AdminLayout() {
           Users
         </Link>
         <Link
-          to="/admin/products"
+          to={`/admin/products`}
           className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/products" && "bg-black"
           }`}
@@ -53,7 +70,7 @@ export default function AdminLayout() {
           Products
         </Link>
         <Link
-          to="/admin/add-products"
+          to={`/admin/add-products`}
           className={`text-2xl rounded-md mt-2 text-white hover:bg-black mb-2 p-2 ${
             currentPath === "/admin/add-products" && "bg-black"
           }`}
@@ -61,12 +78,53 @@ export default function AdminLayout() {
         >
           Add Products
         </Link>
+        <button
+          onClick={handleLogoutClick}
+          className="flex items-center gap-2 text-2xl rounded-md mt-5 text-white hover:bg-black mb-2 p-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
+            />
+          </svg>
+          Logout
+        </button>
       </div>
 
       {/* for the main content */}
       <div className="flex-1 p-4">
         <Outlet />
       </div>
+
+      {/* Logout confirmation dialog */}
+      {showLogoutConfirmation && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded-md text-center">
+            <p className="mb-4">Are you sure you want to logout?</p>
+            <button
+              onClick={handleConfirmLogout}
+              className="bg-red-700 text-white px-4 py-2 rounded-md mr-4"
+            >
+              Yes
+            </button>
+            <button
+              onClick={handleCancelLogout}
+              className="bg-gray-300 px-4 py-2 rounded-md"
+            >
+              No
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

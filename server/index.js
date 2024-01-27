@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const adminRoute = require('./admin/AdminRoute/Route');
 const userRoute = require('./backend/route/route')
@@ -22,6 +23,7 @@ connectDB();
 //middle ware
 
 app.use(express.json());
+app.use(cookieParser())
 
 // Serve static files from the 'uploads' directory
 app.use('/uploads', express.static('uploads'));

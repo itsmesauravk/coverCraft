@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
 import '../App.css'
+import { UserContext } from "../UserContex";
 
 export default function LoginPage() {
 
@@ -12,7 +13,8 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [redirect, setRedirect] = useState(false)
-    const [userId, setUserId] = useState('')
+    // const [userId, setUserId] = useState('')
+    const {setUserInfo} = useContext(UserContext)
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -24,8 +26,9 @@ export default function LoginPage() {
             })
             if (response.status === 200) {
                 console.log("Login Successful")
-                console.log(response.data)
-                setUserId(response.data.id)
+                console.log("Login",response.data)
+                setUserInfo(response.data)
+                // setUserId(response.data.id)
                 setEmail('')
                 setPassword('')
                 setLoading(false)
@@ -42,7 +45,7 @@ export default function LoginPage() {
 
 
     if(redirect){
-        return <Navigate to={`/${userId}`} />;
+        return <Navigate to={`/`} />;
     }
 
     const backgroundImageUrl = "https://images.unsplash.com/photo-1621155346337-1d19476ba7d6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGltYWdlfGVufDB8fDB8fHww"
