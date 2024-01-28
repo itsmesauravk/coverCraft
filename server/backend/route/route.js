@@ -11,12 +11,16 @@ const {
     register,
     login,
     profile,
-    logout
+    logout,
+    getUsers,
+    getProducts
 } = require('../controller/controller');
 
 router.route('/register').post(userPhoto,register);
 router.route('/login').post(login);
 router.route('/profile').get(profile);
 router.route('/logout').post(logout);
+router.route('/get-users').get(getUsers)
+router.route('/get-products').get(getProducts);
 
 module.exports = router;

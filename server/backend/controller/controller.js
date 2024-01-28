@@ -1,8 +1,10 @@
 
 
 const User = require("../../Schema/UserSchema");
+const Product = require("../../Schema/AddSchema");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 
 
 
@@ -134,10 +136,35 @@ const logout = async (req, res) => {
 };
 
 
+// Users
+const getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        console.error("Error while getting users:", error);
+        return res.status(400).json({ message: "Error while getting users" });
+    }
+}
+
+
+//products
+const getProducts = async (req, res) => {
+    try {
+        const products = await Product.find({});
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Error while getting products:", error);
+        return res.status(400).json({ message: "Error while getting products" });
+    }
+}
+
 module.exports = {
     register,
     login,
     profile,
-    logout
+    logout,
+    getUsers,
+    getProducts
 }
 

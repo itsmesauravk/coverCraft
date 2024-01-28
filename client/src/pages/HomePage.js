@@ -1,12 +1,38 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../UserContex";
+import axios from "axios";
 
 export default function HomePage() {
+  const url = "http://localhost:4000";
   const { userInfo } = useContext(UserContext);
   const userId = userInfo ? userInfo.id : null;
   const isAdmin = userInfo ? userInfo.isAdmin : false;
+  const [products, setProducts] = useState([]);
 
+  const getProducts = async () => {
+    try {
+      const response = await axios.get(`${url}/get-products`, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setProducts(response.data);
+      if (response.status === 200) {
+        console.log("Ok");
+      } else {
+        console.log("Error to get data");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  // console.log(products);
   return (
     <div>
       {/* Image with Info */}
@@ -28,11 +54,38 @@ export default function HomePage() {
 
       {/* Shopping Cards Section */}
       <section className="p-8">
-        <h2 className="text-2xl font-bold mb-4">Featured Products</h2>
-        {/* Add your shopping cards or components here */}
-        <div className="h-screen bg-red-500">
-
-        </div>
+        <h2 className="text-3xl font-bold mb-4">Our Products</h2>
+        {products && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <div key={product._id} className="bg-white shadow-lg rounded-lg overflow-hidden">
+                <Link to={`/product/${product._id}`}>
+                <img
+                  src={url + '/' + product.coverPhoto}
+                  alt={product.name}
+                  className="w-64 h-46 object-cover rounded-t-lg"
+                />
+                </Link>
+                <div className="p-4">
+                  <h3 className="font-bold text-xl mb-2">{product.coverName}</h3>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-gray-600">{product.coverPrice}</span>
+                    <Link to={`/product/${product._id}`}>
+                      <button className="bg-yellow-500 text-white px-4 py-2 rounded-full">
+                        View Details
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {!products && (
+          <div>
+            <h1 className="text-2xl mb-4">No Product Found</h1>
+          </div>
+        )}
       </section>
 
     </div>

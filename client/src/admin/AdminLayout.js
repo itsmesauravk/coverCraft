@@ -1,6 +1,7 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../UserContex";
 
 
 export default function AdminLayout() {
@@ -8,6 +9,11 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [currentPath, setCurrentPath] = useState("");
   const [redirect,setRedirect] = useState(false);
+  const {userInfo} = useContext(UserContext)
+
+  const firstName = userInfo.firstName;
+  const lastName = userInfo.lastName;
+  const image = userInfo.photo;
 
 
 
@@ -51,7 +57,13 @@ export default function AdminLayout() {
         <h1 className="text-white font-bold text-xl mb-4 mt-4">Admin Panel</h1>
 
         <div className="mt-3 mb-3">
-          <h1 className="text-2xl font-bold">Admin Info</h1>
+          <img src={url+'/'+image} alt="profile" className="w-20 h-20 rounded-full object-cover" />
+          <h1 className="text-2xl font-bold">
+            {firstName} {lastName}
+          </h1>
+        </div>
+        <div>
+          <Link to={'/'}>Home</Link>
         </div>
 
         <Link
