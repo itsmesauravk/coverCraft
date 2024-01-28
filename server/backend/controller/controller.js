@@ -51,50 +51,53 @@ const register = async (req, res) => {
 
 
 //LOGIN
-
 const login = async (req, res) => {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
         
-        const verifyUser = await User.findOne({email:email});
-        if(!verifyUser){
-            res.status(400).json({msg:"User not found"})
+        const verifyUser = await User.findOne({ email: email });
+        if (!verifyUser) {
+            return res.status(400).json({ msg: "User not found" });
         }
+
         const verifyPassword = bcrypt.compareSync(password, verifyUser.password);
-        if(!verifyPassword){
-            res.status(400).json({msg:"Invalid Password"})
+        if (!verifyPassword) {
+            return res.status(400).json({ msg: "Invalid Password" });
         }
+
         const token = jwt.sign({
-            id:verifyUser._id,
-            firstName:verifyUser.firstName,
-            middleName:verifyUser.middleName,
-            lastName:verifyUser.lastName,
-            email:verifyUser.email,
+            id: verifyUser._id,
+            firstName: verifyUser.firstName,
+            middleName: verifyUser.middleName,
+            lastName: verifyUser.lastName,
+            email: verifyUser.email,
             number: verifyUser.number,
-            photo:verifyUser.photo,
-            isAdmin:verifyUser.isAdmin
+            photo: verifyUser.photo,
+            isAdmin: verifyUser.isAdmin
         }, process.env.JWT_SECRET);
-        
-        if(token){
+
+        if (token) {
             res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
             res.status(200).json({
-                token:token,
-                id:verifyUser._id,
-                firstName:verifyUser.firstName,
-                middleName:verifyUser.middleName,
-                lastName:verifyUser.lastName,
-                email:verifyUser.email,
+                token: token,
+                id: verifyUser._id,
+                firstName: verifyUser.firstName,
+                middleName: verifyUser.middleName,
+                lastName: verifyUser.lastName,
+                email: verifyUser.email,
                 number: verifyUser.number,
-                photo:verifyUser.photo,
-                isAdmin:verifyUser.isAdmin,
-                message:"Login Successful"
-            })
+                photo: verifyUser.photo,
+                isAdmin: verifyUser.isAdmin,
+                message: "Login Successful"
+            });
         }
     } catch (error) {
-        res.status(400).json({msg:"Error while login : ",error:error})
+        // Handle error properly and send an appropriate response
+        console.error("Error while login:", error);
+        res.status(500).json({ msg: "Internal Server Error" });
     }
+};
 
-}
 
 //  FOR GETTING THE PROFILE OF THE USER
 const profile = async (req, res) => {
@@ -151,11 +154,36 @@ const getUsers = async (req, res) => {
 //products
 const getProducts = async (req, res) => {
     try {
-        const products = await Product.find({});
+        const products = await Product.find({}).sort({ createdAt: -1});
         res.status(200).json(products);
     } catch (error) {
         console.error("Error while getting products:", error);
         return res.status(400).json({ message: "Error while getting products" });
+    }
+}
+
+// single product
+const getSingleProduct = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const product = await Product.findById(id);
+        res.status(200).json(product);
+    } catch (error) {
+        console.error("Error while getting single product:", error);
+        return res.status(400).json({ message: "Error while getting single product" });
+    }
+}
+
+// showing the product according to Type (mobile, laptop, wraps)
+
+const getProductsByType = async (req, res) => {
+    try {
+        const type = req.params.type;
+        const products = await Product.find({coverType:type});
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Error while getting products by type:", error);
+        return res.status(400).json({ message: "Error while getting products by type" });
     }
 }
 
@@ -165,6 +193,8 @@ module.exports = {
     profile,
     logout,
     getUsers,
-    getProducts
+    getProducts,
+    getSingleProduct,
+    getProductsByType
 }
 

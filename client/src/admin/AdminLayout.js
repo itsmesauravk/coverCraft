@@ -51,9 +51,9 @@ export default function AdminLayout() {
 
 
   return (
-    <div className="flex">
+    <div className="flex ">
       {/* for the sidebar */}
-      <div className="flex flex-col h-screen w-1/6 bg-red-700  p-4">
+      <div className="flex flex-col h-screen w-1/6 bg-red-700 p-4 sticky z-50 top-0">
         <h1 className="text-white font-bold text-xl mb-4 mt-4">Admin Panel</h1>
 
         <div className="mt-3 mb-3">

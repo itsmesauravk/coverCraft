@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 export default function RegisterPage(){
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ export default function RegisterPage(){
     userPhoto: '',
   });
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [redirect, setRedirect] = useState(false)
 
   const url = "http://localhost:4000"
  
@@ -62,6 +63,8 @@ export default function RegisterPage(){
               userPhoto: '',
             })
             setConfirmPassword('')
+            setRedirect(true)
+
         }else{
             alert("Error registering the user")
         }
@@ -71,6 +74,10 @@ export default function RegisterPage(){
     }
     
   };
+  if(redirect){
+    return <Navigate to={`/login`} />;
+  }
+
 
   const backgroundImageUrl = "https://images.unsplash.com/photo-1621155346337-1d19476ba7d6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGltYWdlfGVufDB8fDB8fHww"
 

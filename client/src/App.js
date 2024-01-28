@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AdminPanel from './admin/AdminPanel';
 import AdminLayout from './admin/AdminLayout';
@@ -15,7 +15,8 @@ import LaptopPage from './pages/LaptopPage';
 import WrapsPage from './pages/WrapsPage';
 import SettingPage from './pages/SettingPage';
 import { UserContext } from './UserContex';
-import PageNotFound from './pages/PageNotFound';
+import SingleProduct from './pages/SingleProduct';
+// import PageNotFound from './pages/PageNotFound';
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
       <Route path='/settings' element={<SettingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path='/product/:id' element={<SingleProduct />} />
 
       {isAdmin && (
           <Route path="/admin" element={<AdminLayout/>}>

@@ -39,8 +39,9 @@ export default function AdminUsers() {
                                 <img src={url+'/'+user.photo} alt={user.firstName} className="w-24 h-24 rounded-full object-cover" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-semibold">{`${user.firstName} ${user.lastName} `}</h2>
-                                <span className="text-sm">({user._id})</span>
+                                <h2 className="text-xl font-semibold">{user.firstName} {user.lastName} <span className="text-sm">({user._id})</span></h2>
+                                
+                                <p className="text-purple-800">{`Number: ${user.number}`}</p>
                                 <p className="text-green-800">{`Email: ${user.email}`}</p>
                                 <p className="text-yellow-800">{`Admin: ${user.isAdmin ? 'Yes' : 'No'}`}</p>
                             </div>

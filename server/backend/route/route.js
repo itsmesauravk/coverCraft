@@ -13,7 +13,9 @@ const {
     profile,
     logout,
     getUsers,
-    getProducts
+    getProducts,
+    getSingleProduct,
+    getProductsByType
 } = require('../controller/controller');
 
 router.route('/register').post(userPhoto,register);
@@ -22,5 +24,7 @@ router.route('/profile').get(profile);
 router.route('/logout').post(logout);
 router.route('/get-users').get(getUsers)
 router.route('/get-products').get(getProducts);
+router.route('/get-single-product/:id').get(getSingleProduct);
+router.route('/get-products-by-type/:type').get(getProductsByType);
 
 module.exports = router;
