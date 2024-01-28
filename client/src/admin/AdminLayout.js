@@ -1,36 +1,48 @@
 import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 
 export default function AdminLayout() {
-
-
+  const url = "http://localhost:4000";
   const navigate = useNavigate();
   const [currentPath, setCurrentPath] = useState("");
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const [redirect,setRedirect] = useState(false);
+
+
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
+
+  const logoutHandler = async() => {
+    const confirm = window.confirm("Are you sure you want to logout?")
+    if(confirm){
+        try {
+            const response = await axios.post(`${url}/logout`)
+            if(response.status === 200){
+                console.log("Logout Successful")
+                setRedirect(true)
+            }else{
+                console.log("Logout Failed")
+            }
+
+        } catch (error) {
+            console.log("Error while logout : ",error)
+        }
+    }
+}
 
   const handleLinkClick = (path) => {
     setCurrentPath(path);
     navigate(path);
   };
 
-  const handleLogoutClick = () => {
-    setShowLogoutConfirmation(true);
-  };
+  if(redirect){
+    return <Navigate to={`/login`} />;
+  }
 
-  const handleConfirmLogout = () => {
-    // Perform any logout cleanup if needed
-    setShowLogoutConfirmation(false);
-    navigate("/login");
-    console.log("Logout Sucessfully");
-  };
 
-  const handleCancelLogout = () => {
-    setShowLogoutConfirmation(false);
-  };
 
   return (
     <div className="flex">
@@ -79,7 +91,7 @@ export default function AdminLayout() {
           Add Products
         </Link>
         <button
-          onClick={handleLogoutClick}
+          onClick={logoutHandler}
           className="flex items-center gap-2 text-2xl rounded-md mt-5 text-white hover:bg-black mb-2 p-1"
         >
           <svg
@@ -105,26 +117,6 @@ export default function AdminLayout() {
         <Outlet />
       </div>
 
-      {/* Logout confirmation dialog */}
-      {showLogoutConfirmation && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-md text-center">
-            <p className="mb-4">Are you sure you want to logout?</p>
-            <button
-              onClick={handleConfirmLogout}
-              className="bg-red-700 text-white px-4 py-2 rounded-md mr-4"
-            >
-              Yes
-            </button>
-            <button
-              onClick={handleCancelLogout}
-              className="bg-gray-300 px-4 py-2 rounded-md"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

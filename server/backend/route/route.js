@@ -10,11 +10,13 @@ const userPhoto = upload.single("userPhoto");
 const {
     register,
     login,
-    profile
+    profile,
+    logout
 } = require('../controller/controller');
 
 router.route('/register').post(userPhoto,register);
 router.route('/login').post(login);
 router.route('/profile').get(profile);
+router.route('/logout').post(logout);
 
 module.exports = router;

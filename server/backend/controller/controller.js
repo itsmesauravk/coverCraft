@@ -121,10 +121,23 @@ const profile = async (req, res) => {
     }
 };
 
+//  FOR LOGGING OUT THE USER
+const logout = async (req, res) => {
+    try {
+        // res.clearCookie("token");
+        res.cookie("token", "", { httpOnly: true, expires: new Date(0) });
+        res.status(200).json({ message: "User logged out" });
+    } catch (error) {
+        console.error("Error while logging out:", error);
+        return res.status(400).json({ message: "Error while logging out" });
+    }
+};
+
 
 module.exports = {
     register,
     login,
-    profile
+    profile,
+    logout
 }
 

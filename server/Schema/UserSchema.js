@@ -22,6 +22,11 @@ const newUserSchema = new mongoose.Schema({
         required:true,
         minlength:8
     },
+    number:{
+        type:Number,
+        required:true,
+        minlength:10
+    },
     photo:{
         type:String,
         default:''
