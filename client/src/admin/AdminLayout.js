@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Link,  Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../UserContex";
@@ -8,8 +8,9 @@ export default function AdminLayout() {
   const url = "http://localhost:4000";
   const navigate = useNavigate();
   const [currentPath, setCurrentPath] = useState("");
-  const [redirect,setRedirect] = useState(false);
   const {userInfo} = useContext(UserContext)
+  const {setUserInfo} = useContext(UserContext)
+
 
   const firstName = userInfo.firstName;
   const lastName = userInfo.lastName;
@@ -28,7 +29,8 @@ export default function AdminLayout() {
             const response = await axios.post(`${url}/logout`)
             if(response.status === 200){
                 console.log("Logout Successful")
-                setRedirect(true)
+                setUserInfo(null)
+                navigate('/')
             }else{
                 console.log("Logout Failed")
             }
@@ -43,11 +45,6 @@ export default function AdminLayout() {
     setCurrentPath(path);
     navigate(path);
   };
-
-  if(redirect){
-    return <Navigate to={`/login`} />;
-  }
-
 
 
   return (

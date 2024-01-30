@@ -1,10 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
+import { UserContext } from "../UserContex";
 
 
 export default function SettingPage() {
     const url = "http://localhost:4000"
+    const {setUserInfo} = useContext(UserContext)
 
     const [redirect, setRedirect] = useState(false)
 
@@ -16,6 +18,7 @@ export default function SettingPage() {
                 if(response.status === 200){
                     console.log("Logout Successful")
                     setRedirect(true)
+                    setUserInfo(null)
                 }else{
                     console.log("Logout Failed")
                 }
@@ -27,7 +30,7 @@ export default function SettingPage() {
     }
 
     if(redirect){
-        return <Navigate to={`/login`} />;
+        return <Navigate to={`/`} />;
     }
 
     return (

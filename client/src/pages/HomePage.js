@@ -48,7 +48,7 @@ export default function HomePage() {
   // console.log(products);
   // console.log(typeFilter);
   return (
-    <div>
+    <div className="">
       {/* Image with Info */}
       <div className="relative">
         <img
@@ -68,60 +68,63 @@ export default function HomePage() {
 
       {/* Shopping Cards Section */}
       {loading && <span className="loader"></span>}
-
-      {!loading && (
-          <section className="p-8">
-            <div className="mt-2 mb-4">
-              <h2 className="text-3xl font-bold mb-4">Our Products</h2>
-              <div>
-                <p>Filter:</p>
-                <label className="mr-2" htmlFor="phone">Type</label>
-                <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                 className="border-2 border-gray-500 rounded-md p-2">
-                  <option value="all">All</option>
-                  <option value="mobile-cover">Phone</option>
-                  <option value="laptop-cover">Laptop</option>
-                  <option value="wraps">wraps</option>
-                </select>
+      <div className="flex justify-center">
+        {!loading && (
+            <section className="p-8 w-4/5">
+              <div className="mt-2 mb-4">
+                <h2 className="text-3xl font-bold mb-4">Our Products</h2>
+                <div>
+                  <p>Filter:</p>
+                  <label className="mr-2" htmlFor="phone">Type</label>
+                  <select
+                  value={typeFilter}
+                  onChange={(e) => setTypeFilter(e.target.value)}
+                  className="border-2 border-gray-500 rounded-md p-2">
+                    <option value="all">All</option>
+                    <option value="mobile-cover">Phone</option>
+                    <option value="laptop-cover">Laptop</option>
+                    <option value="wraps">wraps</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            {products && (
-              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5">
-              {products.map((product) => (
-                <div key={product._id} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl">
-                  <Link to={`/product/${product._id}`}>
-                    <img
-                      src={`${url}/${product.coverPhoto}`}
-                      alt={product.name}
-                      className="w-full h-48 object-contain rounded-t-md"
-                    />
-                  </Link>
-                  <div className="p-4">
-                    <h3 className="font-bold text-xl mb-2">{product.coverName}</h3>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-red-600 font-bold">Rs {product.coverPrice}</span>
-                      <Link to={`/product/${product._id}`}>
-                        <button className="bg-yellow-500 text-white px-4 py-2 rounded-full">
-                          View Details
-                        </button>
-                      </Link>
+              {products && (
+                <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-5">
+                {products.map((product) => (
+                  <div key={product._id} className="bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-2xl">
+                    <Link to={`/product/${product._id}`}>
+                      <img
+                        src={`${url}/${product.coverPhoto}`}
+                        alt={product.name}
+                        className="w-full h-48 object-contain rounded-t-md"
+                      />
+                    </Link>
+                    <div className="p-4">
+                      <h3 className="font-bold text-xl mb-2">{product.coverName}</h3>
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-red-600 font-bold">Rs {product.coverPrice}</span>
+                        <Link to={`/product/${product._id}`}>
+                          <button className="bg-yellow-500 text-white px-4 py-2 rounded-full">
+                            View Details
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
+                ))}
+              </div>            
+              
+              )}
+              {!products && (
+                <div>
+                  <h1 className="text-2xl mb-4">No Product Found</h1>
                 </div>
-              ))}
-            </div>            
-            
-            )}
-            {!products && (
-              <div>
-                <h1 className="text-2xl mb-4">No Product Found</h1>
-              </div>
-            )}
-          </section>
+              )}
+            </section>
 
         )}
+
+
+      </div>
     </div>
   );
 }
