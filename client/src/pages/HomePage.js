@@ -41,6 +41,9 @@ export default function HomePage() {
     }
   };
 
+  //get user data
+  const userData = JSON.parse(localStorage.getItem("userInfo"));
+
   useEffect(() => {
     getProducts();
   }, [typeFilter]);

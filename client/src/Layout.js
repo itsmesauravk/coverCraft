@@ -1,12 +1,15 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { UserContext } from "./UserContex";
+// import { UserContext } from "./UserContex";
 
 
 export default function Layout(){
-    const {userInfo} = useContext(UserContext)
-    const isAdmin = userInfo ? userInfo.isAdmin : false;
-    console.log("Layout",userInfo)
+    // const {userInfo} = useContext(UserContext)
+
+    //to get the userinfo from localhost
+    const userInfoLS = JSON.parse(localStorage.getItem("userInfo"));
+    const isAdmin = userInfoLS ? userInfoLS.isAdmin : false;
+    console.log("Layout localStorage userinfo",userInfoLS)
 
     const url = "http://localhost:4000"
 
@@ -23,7 +26,7 @@ export default function Layout(){
                             <h1 className="text-xl font-bold ml-2">Cover Craftt</h1>
                             </div>
 
-                            {userInfo ? (
+                            {userInfoLS ? (
                                 <div className="flex items-center">
                                 {isAdmin && (
                                     <Link
@@ -37,14 +40,14 @@ export default function Layout(){
                                     <div className="border-2 border-black p-1 rounded-full flex items-center">
                                     <div className="mr-2 ">
                                         <img
-                                            src={`${url}/${userInfo.photo}`}
+                                            src={`${url}/${userInfoLS.photo}`}
                                             alt="Profile Image"
                                             className="w-10 h-10 rounded-full object-cover"
                                         />
                                     </div>
                                     <div>
                                         <h1 className="text-xl font-semibold">
-                                            {userInfo.firstName} {userInfo.lastName}
+                                            {userInfoLS.firstName} {userInfoLS.lastName}
                                         </h1>
                                     </div>
                                 </div>

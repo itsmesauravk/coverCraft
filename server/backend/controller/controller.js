@@ -50,53 +50,58 @@ const register = async (req, res) => {
 }
 
 
-//LOGIN
+
+//login
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         
-        const verifyUser = await User.findOne({ email: email });
-        if (!verifyUser) {
+        const user = await User.findOne({ email });
+
+        if (!user) {
             return res.status(400).json({ msg: "User not found" });
         }
 
-        const verifyPassword = bcrypt.compareSync(password, verifyUser.password);
-        if (!verifyPassword) {
+        const isPasswordValid = bcrypt.compareSync(password, user.password);
+
+        if (!isPasswordValid) {
             return res.status(400).json({ msg: "Invalid Password" });
         }
 
         const token = jwt.sign({
-            id: verifyUser._id,
-            firstName: verifyUser.firstName,
-            middleName: verifyUser.middleName,
-            lastName: verifyUser.lastName,
-            email: verifyUser.email,
-            number: verifyUser.number,
-            photo: verifyUser.photo,
-            isAdmin: verifyUser.isAdmin
-        }, process.env.JWT_SECRET);
+            id: user._id,
+            firstName: user.firstName,
+            middleName: user.middleName,
+            lastName: user.lastName,
+            email: user.email,
+            number: user.number,
+            photo: user.photo,
+            isAdmin: user.isAdmin
+        }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        if (token) {
-            res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
-            res.status(200).json({
-                token: token,
-                id: verifyUser._id,
-                firstName: verifyUser.firstName,
-                middleName: verifyUser.middleName,
-                lastName: verifyUser.lastName,
-                email: verifyUser.email,
-                number: verifyUser.number,
-                photo: verifyUser.photo,
-                isAdmin: verifyUser.isAdmin,
-                message: "Login Successful"
-            });
-        }
+        res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
+
+        res.status(200).json({
+            message: "Login Successful",
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                middleName: user.middleName,
+                lastName: user.lastName,
+                email: user.email,
+                number: user.number,
+                photo: user.photo,
+                isAdmin: user.isAdmin
+            },
+            token
+        });
     } catch (error) {
-        // Handle error properly and send an appropriate response
         console.error("Error while login:", error);
         res.status(500).json({ msg: "Internal Server Error" });
     }
 };
+
+
 
 
 //  FOR GETTING THE PROFILE OF THE USER
@@ -116,7 +121,7 @@ const profile = async (req, res) => {
                 middleName:userInfo.middleName,
                 lastName:userInfo.lastName,
                 email:userInfo.email,
-                isAdmin:userInfo.email
+                isAdmin:userInfo.isAdmin
             });
         }
     } catch (error) {

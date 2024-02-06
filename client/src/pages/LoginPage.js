@@ -5,6 +5,7 @@ import { Link, Navigate } from "react-router-dom";
 import '../App.css'
 import { UserContext } from "../UserContex";
 
+
 export default function LoginPage() {
 
     const url = "http://localhost:4000"
@@ -15,6 +16,7 @@ export default function LoginPage() {
     const [redirect, setRedirect] = useState(false)
     // const [userId, setUserId] = useState('')
     const {setUserInfo} = useContext(UserContext)
+    const [loginErr, setLoginErr] = useState(false)
 
     const loginUser = async (e) => {
         e.preventDefault();
@@ -26,20 +28,26 @@ export default function LoginPage() {
             })
             if (response.status === 200) {
                 console.log("Login Successful")
-                console.log("Login",response.data)
-                setUserInfo(response.data)
-                // setUserId(response.data.id)
+                // console.log("Login",response.data) 
+                setUserInfo(response.data.user)
+                //storing user data in local storage unless they logout
+                localStorage.setItem("userInfo", JSON.stringify(response.data.user))
+                // console.log("Data saved in local Storage.")
+                
                 setEmail('')
                 setPassword('')
                 setLoading(false)
                 setRedirect(true)
+                setLoginErr(false)
             } else {
                 console.log("Login Failed")
                 setLoading(false)
+                setLoginErr(true)
             }
         } catch (error) {
             console.log("Error while login : ", error)
             setLoading(false)
+            setLoginErr(true)
         }
     }
 
@@ -82,6 +90,11 @@ export default function LoginPage() {
                                     placeholder="example123"
                                 />
                             </div>
+                            {loginErr && (
+                                <p className="text-red-500 text-sm mb-4">
+                                    Invalid email or password
+                                </p>
+                            )}
                             <button
                                 type="submit"
                                 className="bg-black text-white font-bold px-4 py-2 rounded-md hover:bg-gray-800"
