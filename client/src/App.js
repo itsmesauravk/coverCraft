@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Routes, Route} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AdminPanel from './admin/AdminPanel';
@@ -19,8 +19,19 @@ import SingleProduct from './pages/SingleProduct';
 // import PageNotFound from './pages/PageNotFound';
 
 function App() {
+  const {userInfo,setUserInfo} = useContext(UserContext)
 
-  const {userInfo} = useContext(UserContext)
+  const fetchUserInfoFromLocalStorage = () => {
+    const storedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+    if (storedUserInfo) {
+      setUserInfo(storedUserInfo);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfoFromLocalStorage();
+  }, []);
+
   const isAdmin = userInfo ? userInfo.isAdmin : false;
   return (
     <Routes>

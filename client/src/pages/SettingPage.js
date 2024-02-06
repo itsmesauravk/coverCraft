@@ -19,6 +19,9 @@ export default function SettingPage() {
                     console.log("Logout Successful")
                     setRedirect(true)
                     setUserInfo(null)
+                    //clearing local storage (user data
+                
+                    localStorage.removeItem("userInfo")
                 }else{
                     console.log("Logout Failed")
                 }

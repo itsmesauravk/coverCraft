@@ -11,10 +11,11 @@ export default function AdminLayout() {
   const {userInfo} = useContext(UserContext)
   const {setUserInfo} = useContext(UserContext)
 
+  const userInfoLS = JSON.parse(localStorage.getItem("userInfo"))
 
-  const firstName = userInfo.firstName;
-  const lastName = userInfo.lastName;
-  const image = userInfo.photo;
+  const firstName = userInfoLS.firstName;
+  const lastName = userInfoLS.lastName;
+  const image = userInfoLS.photo;
 
 
 
@@ -30,6 +31,8 @@ export default function AdminLayout() {
             if(response.status === 200){
                 console.log("Logout Successful")
                 setUserInfo(null)
+                //clearing local storage (user data)
+                localStorage.removeItem("userInfo")
                 navigate('/')
             }else{
                 console.log("Logout Failed")
