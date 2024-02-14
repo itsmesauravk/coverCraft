@@ -192,6 +192,57 @@ const getProductsByType = async (req, res) => {
     }
 }
 
+//for editing , and deleting user
+// expected req data(userId)
+
+//for deleting data
+const deleteUserCustomer = async(req,res) =>{
+    try{
+        const {userId} = req.params;
+
+        const deleteUser = await User.findByIdAndDelete({_id: userId})
+        if(deleteUser){
+            res.status(200).json({message:"User Deleted Sucessfully!"})
+        }
+
+    }catch(err){
+        res.status(404).json({message:"User not found!", error: err})
+    }
+}
+
+//make admin or remove from admin
+const userRank = async(req,res)=>{
+    try{
+        const {userId} = req.params;
+        const {role} = req.body;
+        // role ->'admin' make user to admin
+        if(role == "admin"){
+            const makeAdmin = await User.findByIdAndUpdate(userId,{
+                $set:{
+                    isAdmin:true
+                }
+            })
+            if(!makeAdmin){
+                res.status(400).json({message:"Updated Unsuccessful!!"})
+            }
+            res.status(200).json({message:"Update Successful!!"})
+        }else{
+            const removeFromAdmin = await User.findByIdAndUpdate(userId,{
+                $set:{
+                    isAdmin:false
+                }
+            })
+            if(!removeFromAdmin){
+                res.status(400).json({message:"Updated Unsuccessful!!"})
+            }
+            res.status(200).json({message:"Update Successful!!"})
+        }
+        
+    }catch(err){
+        res.status(404).json({message:"User not found!!", error:err})
+    }
+}
+
 module.exports = {
     register,
     login,
@@ -200,6 +251,8 @@ module.exports = {
     getUsers,
     getProducts,
     getSingleProduct,
-    getProductsByType
+    getProductsByType,
+    deleteUserCustomer,
+    userRank
 }
 
