@@ -1,7 +1,8 @@
 
 
 const User = require("../../Schema/UserSchema");
-const Product = require("../../Schema/AddSchema");
+const Product = require("../../Schema/ProductSchema");
+const Cart = require("../../Schema/ProductCart")
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -211,6 +212,13 @@ const deleteUserCustomer = async(req,res) =>{
 }
 
 //make admin or remove from admin
+const handleStatus = (data) =>{
+    if(!data){
+        res.status(400).json({message:"Updated Unsuccessful!!"})
+    }
+    res.status(200).json({message:"Update Successful!!"})
+}
+
 const userRank = async(req,res)=>{
     try{
         const {userId} = req.params;
@@ -222,26 +230,108 @@ const userRank = async(req,res)=>{
                     isAdmin:true
                 }
             })
-            if(!makeAdmin){
-                res.status(400).json({message:"Updated Unsuccessful!!"})
-            }
-            res.status(200).json({message:"Update Successful!!"})
+            handleStatus(makeAdmin)
+            // if(!makeAdmin){
+            //     res.status(400).json({message:"Updated Unsuccessful!!"})
+            // }
+            // res.status(200).json({message:"Update Successful!!"})
         }else{
             const removeFromAdmin = await User.findByIdAndUpdate(userId,{
                 $set:{
                     isAdmin:false
                 }
             })
-            if(!removeFromAdmin){
-                res.status(400).json({message:"Updated Unsuccessful!!"})
-            }
-            res.status(200).json({message:"Update Successful!!"})
+            handleStatus(removeFromAdmin)
+            // if(!removeFromAdmin){
+            //     res.status(400).json({message:"Updated Unsuccessful!!"})
+            // }
+            // res.status(200).json({message:"Update Successful!!"})
         }
         
     }catch(err){
         res.status(404).json({message:"User not found!!", error:err})
     }
 }
+
+//for add to cart system
+//req -> userId , productId, quantity
+
+const addToCart = async (req, res) => {
+    try {
+        const { userId, productId, quantity } = req.body;
+
+        const product = await Product.findById(productId);
+        const user = await User.findById(userId);
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found!!" });
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found!!" });
+        }
+
+        const cartItem = await Cart.findOne({ user: userId, product: productId });
+
+        if (cartItem) {
+            // Product is already in the cart, update quantity
+            cartItem.quantity += quantity;
+            await cartItem.save();  // Save the updated cart item
+        } else {
+            // Product is not in the cart, create a new cart item
+            await Cart.create({
+                user: userId,
+                product: productId,
+                quantity: quantity
+            });
+        }
+
+        res.status(200).json({ message: "Product added to cart successfully!!" });
+    } catch (error) {
+        res.status(500).json({ message: "Add to cart process failed !!", error: error });
+    }
+};
+
+
+
+//remove from cart
+const removeFromCart = async (req, res) => {
+    try {
+        const { userId, productId, quantity } = req.body;
+
+        const product = await Product.findById(productId);
+        const user = await User.findById(userId);
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found!!" });
+        }
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found!!" });
+        }
+
+        const cartItem = await Cart.findOne({ user: userId, product: productId });
+
+        if (cartItem) {
+            // Check if the requested quantity is greater than or equal to the cart item quantity
+            if (quantity >= cartItem.quantity) {
+                // Remove the entire cart item
+                await cartItem.remove();
+            } else {
+                // Decrease the quantity
+                cartItem.quantity -= quantity;
+                await cartItem.save();  // Save the updated cart item
+            }
+
+            return res.status(200).json({ message: "Product removed from cart successfully!!" });
+        }
+
+        res.status(404).json({ message: "Product not found in the user's cart!!" });
+    } catch (error) {
+        res.status(500).json({ message: "Remove from cart process failed !!", error: error });
+    }
+};
+
 
 module.exports = {
     register,
@@ -253,6 +343,9 @@ module.exports = {
     getSingleProduct,
     getProductsByType,
     deleteUserCustomer,
-    userRank
+    userRank,
+    addToCart,
+    removeFromCart
+
 }
 

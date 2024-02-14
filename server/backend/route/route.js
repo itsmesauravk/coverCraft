@@ -17,7 +17,9 @@ const {
     getSingleProduct,
     getProductsByType,
     deleteUserCustomer,
-    userRank
+    userRank,
+    addToCart,
+    removeFromCart
 } = require('../controller/controller');
 
 router.route('/register').post(userPhoto,register);
@@ -30,5 +32,7 @@ router.route('/get-single-product/:id').get(getSingleProduct);
 router.route('/get-products-by-type/:type').get(getProductsByType);
 router.route('/delete-user/:id').post(deleteUserCustomer)
 router.route('/user-rank/:id').post(userRank)
+router.route('/add-to-cart').post(addToCart)
+router.route('/remove-from-cart').post(removeFromCart)
 
 module.exports = router;
